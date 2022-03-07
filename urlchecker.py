@@ -26,7 +26,7 @@ def urlchecker(url: str):
                 hp = remain.split("/")[0].split(":")
                 hostname, port = (hp[0], None) if len(hp) == 1 else (hp[0], hp[1])
                 if(len(hostname) >= 1):  # hostname must not be empty
-                    return True if not port else port.isdigit()  # Port, if present, must only be digits
+                    return True if port == None else port.isdigit()  # Port, if present, must only be digits
     return False
 
 
@@ -50,6 +50,7 @@ def testurl():
         ['https://example/xy z', False],
         ['https://example/xyz:', False],
         ['https://example', False],
+        ['https://example:/', False]
     ]
     for url, expected in urls:
         if urlchecker(url) != expected:
