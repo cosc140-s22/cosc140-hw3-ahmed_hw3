@@ -5,45 +5,28 @@
 #######################################################
 
 def urlchecker(url: str):
-    if(url.count(":") > 2):  # Aside from port and scheme, no other colons may be present in the url
-        return False
-
-    if(url.count(" ") > 0):  # There cannot be any spaces in the URL
-        return False
-
-    # there can only be a single #
-    if(url.count("#") > 1):
-        return False
-
-    # there can only be a single ?
-    if(url.count("?") > 1):
-        return False
-
     # If a # is present, it must appear before the ?, if present
-    if ("?" in url and "#" in url):
-        if(url.find("#") > url.find("?")):
-            return False
+    if(url.find("#") > url.find("?") > -1):
+        return False
+
+    if not all([url.count(" ") == 0, url.count("#") <= 1, url.count("?") <= 1, 1 <= url.count(":") <= 2]):
+        '''
+            There cannot be any spaces in the URL
+            There can only be a single #
+            There can only be a single ?
+            There must be at least one and at most 2 colons (one for scheme and an optional for port)
+        '''
+        return False
 
     if (url.startswith(("http://", "https://"))):  # scheme must be http or https;
         url_split = url.split("://")
         if(len(url_split) == 2):
             remain = url_split[1]
-            # Port must be before the slash
-            if(":" in remain and ":" in remain):
-                if(remain.find(":") > remain.find("/")):
-                    return False
-            if(remain.count("/") > 0):  # there must be a slash after the hostname (and optional port)
-                hp = remain.split("/")[0]
-                hp_split = hp.split(":")
-                hostname = hp_split[0]
+            if(remain.find(":") < remain.find("/") > -1):  # there must be a slash after the hostname (and optional port)
+                hp = remain.split("/")[0].split(":")
+                hostname, port = (hp[0], None) if len(hp) == 1 else (hp[0], hp[1])
                 if(len(hostname) >= 1):  # hostname must not be empty
-                    if(len(hp_split) == 2):
-                        # port, if present, must only be digits
-                        port = hp_split[1]
-                        if (port.isdigit()):
-                            return True
-                    else:
-                        return True
+                    return True if not port else port.isdigit()  # Port, if present, must only be digits
     return False
 
 
