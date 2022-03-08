@@ -41,19 +41,16 @@ def main():
     words = load_wordlist()
     print(f"{len(words)} words loaded.")
     fragment = ""
-    players = {
-        -1: "Player 1",
-        1: "Player 2"
-    }
-    p = -1
+    player = "Player 1"
+
     while True:
-        l = get_input(players[p])
+        l = get_input(player)
         fragment += l
-        print(F"{players[p]} chose {l}, giving the fragment {fragment}")
+        print(F"{player} chose {l}, giving the fragment {fragment}")
         if(valid_frag(fragment, words)):
-            p *= -1  # Toggle Player
+            player = "Player 2" if player == "Player 1" else "Player 1"  # Toggle Player
         else:
-            print(F"{players[p]} just lost")
+            print(F"{player} just lost")
             break
 
 
