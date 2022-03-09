@@ -48,7 +48,7 @@ def main():
         fragment += l
         print(F"{player} chose {l}, giving the fragment {fragment}")
         if(valid_frag(fragment, words)):
-            player = "Player 2" if player == "Player 1" else "Player 1"  # Toggle Player
+            player = F"Player {'2' if player[-1]=='1' else '1'}"  # Toggle Player
         else:
             print(F"{player} just lost")
             break
